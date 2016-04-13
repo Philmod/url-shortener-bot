@@ -1,0 +1,19 @@
+{
+  "name": "mybot",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": "5.10.0"
+  }
+  "dependencies": {
+    "express": "^4.13.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Philmod <philippe.modard@gmail.com>",
+  "license": "ISC"
+}
