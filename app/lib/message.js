@@ -28,19 +28,7 @@ const handle = event => {
     let url = getUrl(text);
     if (url) {
       if (url.indexOf(config.url_shortener_url) > -1) {
-        sendTemplate(sender, [{
-          title: "Oh, this is an existing shortened url",
-          subtitle: "Do you want to get stats about it?",
-          buttons: [{
-            type: "postback",
-            title: "Yes",
-            payload: url
-          }, {
-            type: "postback",
-            title: "No",
-            payload: "No"
-          }],
-        }]);
+        sendAskMoreInfo(sender, url);
       } else {
         shortener.shorten(url, (err, shortenedUrl) => {
           if (err) {
@@ -55,18 +43,46 @@ const handle = event => {
     }
   }
   else if (event.postback) {
-    if (event.postback == 'No') {
-      send(sender, "Alright, no worries.");
-    } else {
-      shortener.get(event.postback, (err, info) => {
-        if (err) {
-          send(sender, "I am sorry, an error happened while getting information about your url: " + err);
-        } else {
-          let content = The
-          send(sender, JSON.stringify(info));
-        }
-      });
-    }
+    handlePostback(event.postback);
+  }
+}
+
+/**
+ * Send message to ask if user wants more information.
+ */
+const sendAskMoreInfo = (sender, url) => {
+  sendTemplate(sender, [{
+    title: "Oh, this is an existing shortened url!",
+    subtitle: "Do you want to get some stats about it?",
+    buttons: [{
+      type: "postback",
+      title: "Yes",
+      payload: url
+    }, {
+      type: "postback",
+      title: "No",
+      payload: "No"
+    }],
+  }]);
+}
+
+/**
+ * Handle postback.
+ */
+const handlePostback = postback => {
+  console.log('postback : ', JSON.stringify(postback));
+  if (postback == 'No') {
+    send(sender, "Alright, no worries.");
+  } else {
+    shortener.get(postback, (err, info) => {
+      if (err) {
+        send(sender, "I am sorry, an error happened while getting information about your url: " + err);
+      } else {
+        send(sender, "The full url is : " + info.fullUrl);
+        send(sender, "It has been created on " + info.date);
+        send(sender, "And it had " + info.viewCount + ' views.');
+      }
+    });
   }
 }
 
