@@ -27,13 +27,24 @@ const handle = event => {
     let text = event.message.text;
     let url = getUrl(text);
     if (url) {
-      shortener.shorten(url, (err, shortenedUrl) => {
-        if (err) {
-          send(sender, "I am sorry, an error happened while shortening your url: " + err);
-        } else {
-          send(sender, "Here it is, short and sweet: " + shortenedUrl);
-        }
-      });
+      if (url.indexOf(config.url_shortener_url) > -1) {
+        shortener.get(url, (err, info) => {
+          if (err) {
+            send(sender, "I am sorry, an error happened while getting information about your url: " + err);
+          } else {
+            send(sender, "Oh, this is a existing shortened url. Let me get you some information about it...");
+            send(sender, JSON.stringify(info));
+          }
+        });
+      } else {
+        shortener.shorten(url, (err, shortenedUrl) => {
+          if (err) {
+            send(sender, "I am sorry, an error happened while shortening your url: " + err);
+          } else {
+            send(sender, "Here it is, short and sweet: " + shortenedUrl);
+          }
+        });
+      }
     } else {
       send(sender, "Post here an url so I can help you");
     }
