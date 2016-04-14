@@ -1,0 +1,7 @@
+{
+  "logger": "dev",
+  "facebook_verif_token": "facebook_verif_token",
+  "facebook_url": "https://graph.facebook.com/v2.6/me/messages",
+  "facebook_page_token": "facebook_page_token",
+  "url_shortener_url": "http://localhost:3070"
+}

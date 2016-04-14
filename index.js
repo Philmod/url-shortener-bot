@@ -1,18 +1,30 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const config = require('config');
 
-const TOKEN = 'hello_super_verify_token'
+var NODE_ENV = process.env.NODE_ENV;
+const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Hello World')
-})
+if (!NODE_ENV) {
+  NODE_ENV = process.env.NODE_ENV = 'development';
+}
 
-app.get('/webhook', (req, res) => {
-  res.json('Hello Webhook', req.query);
-  if (req.query['hub.verify_token'] === TOKEN) {
-    res.send(req.query['hub.challenge']);
-  }
-  res.send('Error, wrong validation token');
-})
+/**
+ * Load the libraries, config, models, controllers, routes.
+ */
+app.errors = require('./app/lib/errors');
+require('./app/lib/express')(app);
+app.set('controllers', require('./app/controllers')(app));
+require('./app/routes')(app);
 
-app.listen(8080)
+/**
+ * Start server if not test environment.
+ */
+if (app.set('env') !== 'test' && app.set('env') !== 'circleci') {
+  app.set('port', (process.env.PORT || 8080));
+  const port = app.get('port');
+  const server = app.listen(port, () => {
+    console.log('url-shortener listening at http://localhost:%s in %s environment (node %s).', server.address().port, app.set('env'), process.version);
+  });
+}
+
+module.exports = app;
