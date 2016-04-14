@@ -1,11 +1,9 @@
-const path = require('path');
-const urlLib = require('../lib/url');
+'use strict';
 
 module.exports = app => {
 
   const errors = app.errors;
-  const models = app.set('models');
-  const Url = models.Url;
+  const messageLib = require('../lib/message')(app);
 
   /**
    * Verify token.
@@ -19,38 +17,16 @@ module.exports = app => {
   };
 
   /**
-   * Given an url, return a short version.
+   * Receive messages.
    */
-  const insert = (req, res, next) => {
-    var url = req.body.url;
-    Url.shortenAndInsert(url, (err, shortUrl) => {
-      if (err) return next(err);
-      else {
-        res.render('shorten_success.hbs', {
-          shortUrl: shortUrl
-        });
-      }
-    });
-  }
-
-  /**
-   * Given a short url, redirect to the full page.
-   */
-  const redirect = (req, res, next) => {
-    var id = req.params.id;
-    Url.getById(id, (err, url) => {
-      if (err) return next(err);
-      if (!url) return next(new errors.NotFound('This short url does not exist'));
-      else {
-        Url.incrementView(id, 1); // Async
-        return res.redirect(url.fullUrl);
-      }
-    });
-  }
+  const messages = (req, res, next) => {
+    let messaging_events = req.body.entry[0].messaging;
+    messaging_events.forEach(messageLib.handle);
+    res.sendStatus(200);
+  };
 
   return {
     verification: verification,
-    insert: insert,
-    redirect: redirect,
+    messages: messages
   }
 }
