@@ -28,14 +28,19 @@ const handle = event => {
     let url = getUrl(text);
     if (url) {
       if (url.indexOf(config.url_shortener_url) > -1) {
-        shortener.get(url, (err, info) => {
-          if (err) {
-            send(sender, "I am sorry, an error happened while getting information about your url: " + err);
-          } else {
-            send(sender, "Oh, this is a existing shortened url. Let me get you some information about it...");
-            send(sender, JSON.stringify(info));
-          }
-        });
+        sendTemplate(sender, [{
+          title: "Oh, this is an existing shortened url",
+          subtitle: "Do you want to get stats about it?",
+          buttons: [{
+            type: "postback",
+            title: "Yes",
+            payload: url
+          }, {
+            type: "postback",
+            title: "No",
+            payload: "No"
+          }],
+        }]);
       } else {
         shortener.shorten(url, (err, shortenedUrl) => {
           if (err) {
@@ -46,12 +51,22 @@ const handle = event => {
         });
       }
     } else {
-      send(sender, "Post here an url so I can help you");
+      send(sender, "Hey! Post here an url so I can help you.");
     }
   }
   else if (event.postback) {
-    let text = JSON.stringify(event.postback);
-    send(sender, "Postback received: " + text.substring(0, 200));
+    if (event.postback == 'No') {
+      send(sender, "Alright, no worries.");
+    } else {
+      shortener.get(event.postback, (err, info) => {
+        if (err) {
+          send(sender, "I am sorry, an error happened while getting information about your url: " + err);
+        } else {
+          let content = The
+          send(sender, JSON.stringify(info));
+        }
+      });
+    }
   }
 }
 
