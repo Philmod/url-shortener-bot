@@ -28,7 +28,8 @@ module.exports = {
     request({
       url: config.url_shortener_url + 'api/urls/' + id,
     }, (err, res, body) => {
-      callback(err, body)
+      console.log('hello results : ', typeof body, body);
+      callback(err, body);
     });
   }
 
