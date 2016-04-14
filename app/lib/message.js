@@ -79,9 +79,7 @@ const handlePostback = (sender, postback) => {
       if (err) {
         send(sender, "I am sorry, an error happened while getting information about your url: " + err);
       } else {
-        send(sender, "The full url is : " + info.fullUrl);
-        send(sender, "It has been created on " + info.date);
-        send(sender, "And it had " + info.viewCount + ' views.');
+        send(sender, "The full url is : " + info.fullUrl + ", and it had " + info.viewCount + " views so far.");
       }
     });
   }
@@ -114,34 +112,11 @@ const send = (sender, data) => {
  */
 const sendTemplate = (sender, elements) => {
   let messageData = {
-    "attachment": {
-      "type": "template",
-      "payload": {
-        "template_type": "generic",
-        "elements": elements
-        // [{
-        //   "title": "First card",
-        //   "subtitle": "Element #1 of an hscroll",
-        //   "image_url": "http://messengerdemo.parseapp.com/img/rift.png",
-        //   "buttons": [{
-        //     "type": "web_url",
-        //     "url": "https://www.messenger.com/",
-        //     "title": "Web url"
-        //   }, {
-        //     "type": "postback",
-        //     "title": "Postback",
-        //     "payload": "Payload for first element in a generic bubble",
-        //   }],
-        // },{
-        //   "title": "Second card",
-        //   "subtitle": "Element #2 of an hscroll",
-        //   "image_url": "http://messengerdemo.parseapp.com/img/gearvr.png",
-        //   "buttons": [{
-        //     "type": "postback",
-        //     "title": "Postback",
-        //     "payload": "Payload for second element in a generic bubble",
-        //   }],
-        // }]
+    attachment: {
+      type: "template",
+      payload: {
+        template_type: "generic",
+        elements: elements
       }
     }
   };
