@@ -6,6 +6,18 @@ const config = require('config');
 const shortener = require('./shortener');
 
 /**
+ * Get url from text.
+ */
+const getUrl = text => {
+  let elements = text.split(' ');
+  let url;
+  elements.forEach(elt => {
+    url = validUrl.isUri(elt) ? elt : null;
+  });
+  return url;
+}
+
+/**
  * Handle incoming message.
  */
 const handle = event => {
@@ -13,11 +25,7 @@ const handle = event => {
 
   if (event.message && event.message.text) {
     let text = event.message.text;
-    let elements = text.split(' ');
-    let url;
-    elements.forEach(elt => {
-      url = validUrl.isUri(elt) ? elt : null;
-    });
+    let url = getUrl(text);
     if (url) {
       shortener.shorten(url, (err, shortenedUrl) => {
         if (err) {
