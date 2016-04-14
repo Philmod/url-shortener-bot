@@ -1,0 +1,10 @@
+machine:
+  post:
+    - npm install mocha@2.4.5 -g
+  node:
+    version: 5.1.0
+  environment:
+    NODE_ENV: test
+test:
+  override:
+    - npm run circleci
