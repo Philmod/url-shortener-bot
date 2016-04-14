@@ -1,11 +1,11 @@
 'use strict';
 
 const config = require('config');
+const messageLib = require('../lib/message');
 
 module.exports = app => {
 
   const errors = app.errors;
-  const messageLib = require('../lib/message')(app);
 
   /**
    * Verify token.
@@ -31,4 +31,5 @@ module.exports = app => {
     verification: verification,
     messages: messages
   }
+
 }
