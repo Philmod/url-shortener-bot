@@ -70,11 +70,12 @@ const sendAskMoreInfo = (sender, url) => {
  * Handle postback.
  */
 const handlePostback = postback => {
-  console.log('postback : ', JSON.stringify(postback));
-  if (postback == 'No') {
+  let payload = postback.payload;
+  if (payload == 'No') {
     send(sender, "Alright, no worries.");
   } else {
-    shortener.get(postback, (err, info) => {
+    let url = payload;
+    shortener.get(url, (err, info) => {
       if (err) {
         send(sender, "I am sorry, an error happened while getting information about your url: " + err);
       } else {
