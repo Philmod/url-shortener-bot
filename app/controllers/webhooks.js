@@ -22,7 +22,6 @@ module.exports = app => {
    * Receive messages.
    */
   const messages = (req, res, next) => {
-    console.log('req.body : ', JSON.stringify(req.body));
     let messaging_events = req.body.entry[0].messaging;
     messaging_events.forEach(messageLib.handle);
     res.sendStatus(200);

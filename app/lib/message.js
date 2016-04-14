@@ -1,7 +1,8 @@
 'use strict';
 const validUrl = require('valid-url');
 const url = require('url');
-
+const request = require('request');
+const config = require('config');
 
 module.exports = app => {
 
@@ -38,8 +39,8 @@ module.exports = app => {
   const send = (sender, data) => {
     const message = (typeof data === 'string') ? {text: data} : data;
     request({
-      url: FACEBOOK_URL,
-      qs: {access_token:PAGE_TOKEN},
+      url: config.facebook_url,
+      qs: {access_token:config.facebook_page_token},
       method: 'POST',
       json: {
         recipient: {id:sender},
