@@ -4,7 +4,7 @@ const config = require('config');
 module.exports = {
 
   shorten: (url, callback) => {
-    console.log('shorten 1 : ', config.url_shortener_url + 'api/urls'))
+    console.log('shorten 1 : ', (config.url_shortener_url + 'api/urls'));
     request({
       url: config.url_shortener_url + 'api/urls',
       method: 'POST',
