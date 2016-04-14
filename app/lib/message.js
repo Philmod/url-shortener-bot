@@ -43,7 +43,7 @@ const handle = event => {
     }
   }
   else if (event.postback) {
-    handlePostback(event.postback);
+    handlePostback(sender, event.postback);
   }
 }
 
@@ -69,7 +69,7 @@ const sendAskMoreInfo = (sender, url) => {
 /**
  * Handle postback.
  */
-const handlePostback = postback => {
+const handlePostback = (sender, postback) => {
   let payload = postback.payload;
   if (payload == 'No') {
     send(sender, "Alright, no worries.");
